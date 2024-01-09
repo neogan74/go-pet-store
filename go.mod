@@ -7,7 +7,6 @@ require (
 	github.com/go-openapi/loads v0.21.5
 	github.com/go-openapi/runtime v0.26.2
 	github.com/go-openapi/swag v0.22.7
-	github.com/go-swagger/go-swagger v0.30.5
 )
 
 require (
