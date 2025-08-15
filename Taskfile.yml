@@ -3,7 +3,9 @@
 version: '3'
 
 vars:
+  GO_VERSION: '1.25'
   GREETING: Hello, World!
+  GOFUMPT: '{{.BIN_DIR}}/gofumpt'
 
 tasks:
   default:
