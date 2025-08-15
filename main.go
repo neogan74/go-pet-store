@@ -27,6 +27,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	// serve the api at /api
 	log.Println("Serving petstore api on http://127.0.0.1:8344/api/")
 	_ = http.ListenAndServe(":8344", petstoreAPI)
 }
