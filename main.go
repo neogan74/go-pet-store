@@ -22,6 +22,7 @@ import (
 )
 
 func main() {
+	// just get api handler
 	petstoreAPI, err := api.NewPetstore()
 	if err != nil {
 		log.Fatalln(err)
