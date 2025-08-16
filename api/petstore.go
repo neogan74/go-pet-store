@@ -103,6 +103,7 @@ func addPet(pet Pet) {
 	pets = append(pets, pet)
 }
 
+// removePet removes a pet from the store by ID
 func removePet(id int64) {
 	petsLock.Lock()
 	defer petsLock.Unlock()
@@ -115,6 +116,7 @@ func removePet(id int64) {
 	pets = newPets
 }
 
+// petByID finds a pet by ID
 func petByID(id int64) (*Pet, error) {
 	for _, pet := range pets {
 		if pet.ID == id {
