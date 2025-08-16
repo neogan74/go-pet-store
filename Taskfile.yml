@@ -4,6 +4,7 @@ version: '3'
 
 vars:
   GO_VERSION: '1.25'
+  GOFUMPT_VERSION: 'v0.8.0'
   GREETING: Hello, World!
   GOFUMPT: '{{.BIN_DIR}}/gofumpt'
 
