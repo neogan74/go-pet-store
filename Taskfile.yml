@@ -6,10 +6,13 @@ vars:
   GO_VERSION: '1.25'
   GOFUMPT_VERSION: 'v0.8.0'
   GCI_VERSION: 'v0.13.6'
+  GOLANGCI_LINT_VERSION: 'v2.1.5'
+
   GREETING: Hello, World!
   BIN_DIR: '{{.ROOT_DIR}}/bin'
   GCI: '{{.BIN_DIR}}/gci'
   GOFUMPT: '{{.BIN_DIR}}/gofumpt'
+  GOLANGCI_LINT: '{{.BIN_DIR}}/golangci-lint'
 
 tasks:
   default:
@@ -46,3 +49,15 @@ tasks:
       - |
         echo "🎯 Сортируем импорты через gci ..."
         find . -type f -name '*.go' ! -path '*/mocks/*' -exec {{.GCI}} write -s standard -s default -s "prefix(github.com/neogna74/)" {} +
+
+  install-golangci-lint:
+    desc: "Устанавливает golangci-lint в каталог bin"
+    cmds:
+      - |
+        [ -f {{.GOLANGCI_LINT}} ] || {
+          mkdir -p {{.BIN_DIR}}
+          echo "📦 Устанавливаем golangci-lint {{.GOLANGCI_LINT_VERSION}}..."
+          GOBIN={{.BIN_DIR}} go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{{.GOLANGCI_LINT_VERSION}}
+        }
+    status:
+      - test -x {{.GOLANGCI_LINT}}
