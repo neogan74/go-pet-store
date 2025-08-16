@@ -90,10 +90,12 @@ var (
 	lastPetID int64 = 2
 )
 
+// newPetID generates a new pet ID
 func newPetID() int64 {
 	return atomic.AddInt64(&lastPetID, 1)
 }
 
+// addPet adds a new pet to the store
 func addPet(pet Pet) {
 	petsLock.Lock()
 	defer petsLock.Unlock()
