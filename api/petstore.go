@@ -50,6 +50,7 @@ var getAllPets = runtime.OperationHandlerFunc(func(data interface{}) (interface{
 	fmt.Printf("%#v\n", data)
 	return pets, nil
 })
+
 var createPet = runtime.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
 	fmt.Println("createPet")
 	fmt.Printf("%#v\n", data)
@@ -98,8 +99,10 @@ var pets = []Pet{
 	{ID: 3, Name: "Parrot", PhotoURLs: []string{}, Status: "delivering", Tags: nil},
 }
 
-var petsLock = &sync.Mutex{}
-var lastPetID int64 = 2
+var (
+	petsLock        = &sync.Mutex{}
+	lastPetID int64 = 2
+)
 
 func newPetID() int64 {
 	return atomic.AddInt64(&lastPetID, 1)
