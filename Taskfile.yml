@@ -5,7 +5,10 @@ version: '3'
 vars:
   GO_VERSION: '1.25'
   GOFUMPT_VERSION: 'v0.8.0'
+  GCI_VERSION: 'v0.13.6'
   GREETING: Hello, World!
+  BIN_DIR: '{{.ROOT_DIR}}/bin'
+  GCI: '{{.BIN_DIR}}/gci'
   GOFUMPT: '{{.BIN_DIR}}/gofumpt'
 
 tasks:
