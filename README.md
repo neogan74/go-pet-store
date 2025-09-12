@@ -1,1 +1,1 @@
-Just test pet store on swagget open API
+Just test pet store on swagger open API
