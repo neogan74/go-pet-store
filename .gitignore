@@ -2,3 +2,4 @@ bin/gofumpt
 bin/gci
 bin/golangci-lint
 main
+bin/go-oapi-merge
