@@ -3,11 +3,28 @@ package main
 import (
 	"log"
 	"net/http"
+	"sync"
+	"time"
 
 	"github.com/neogan74/go-pet-store/api"
 )
 
+const (
+	port = ":5000"
+	// timout for http server
+	readHeaderTimeout = 5 * time.Second
+	shutdownTimeout   = 10 * time.Second
+)
+
+type PetStorage struct {
+	mu       sync.RWMutex
+	petStore map[int64]api.Pet
+}
+
 func main() {
+
+	r := chi.NewRouter()
+
 	// just get api handler
 	petstoreAPI, err := api.NewPetstore()
 	if err != nil {
