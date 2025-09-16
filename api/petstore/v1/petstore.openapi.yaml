@@ -1,248 +1,35 @@
-openapi: 3.1.3
+openapi: 3.1.0
 info:
   title: Petstore API
   description: API для работы с данными о питомцах
   version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Локальный сервер для разработки
 x-ogen:
   package: petstore
   module: github.com/neogan74/go-pet-store
   go: "1.25"
   license: MIT
   clean: true
-
 tags:
   - name: pets
     description: Операции с питомцами
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+
 
 paths:
   /api/v1/pets:
-    parameters:
-      - name: pets
-        in: path
-        required: true
-        description: Питомцы
-        schema:
-          type: string
-          maxLength: 50
-          minLength: 1
-          example: dog
-    get:
-      tags:
-        - pets
-      summary: Получить список всех питомцев
-      operationId: listPets
-      parameters:
-        - name: limit
-          in: query
-          description: Максимальное количество результатов для возврата
-          required: false
-          schema:
-            type: integer
-            format: int32
-            minimum: 1
-            default: 10
-      responses:
-        '200':
-          description: Список питомцев успешно получен
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '404':
-          description: Питомцы не найдены
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error404'
-        '400':
-          description: Некорректный запрос (например, неверный параметр limit)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Внутренняя ошибка сервера
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        'default':
-          description: Неизвестная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/generic_error.yaml'
-    put:
-      tags:
-        - pets
-      summary: Добавить нового питомца
-      operationId: createPet
-      requestBody:
-        description: Данные нового питомца
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewPet'
-      responses:
-        '201':
-          description: Питомец успешно создан
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Некорректный запрос (например, отсутствует обязательное поле)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Внутренняя ошибка сервера
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        'default':
-          description: Неизвестная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/generic_error.yaml'        
-  /api/v1/pets/{petId}:
-    parameters:
-      - name: petId
-        in: path
-        required: true
-        description: Идентификатор питомца
-        schema:
-          type: integer
-          format: int64
-          minimum: 1
-          example: 123
-    get:
-      tags:
-        - pets
-      summary: Получить информацию о питомце по ID
-      operationId: getPetById
-      responses:
-        '200':
-          description: Информация о питомце успешно получена
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '404':
-          description: Питомец с указанным ID не найден
-          content:
-            application/json:
-              schema: 
-                  $ref: '#/components/schemas/Error404'
-        '400':
-          description: Некорректный запрос (например, неверный формат ID)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Внутренняя ошибка сервера
-          content:
-            application/json: 
-              schema:
-                $ref: '#/components/schemas/Error'
-        'default':
-          description: Неизвестная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/generic_error.yaml'
-    delete:
-      tags:
-        - pets
-      summary: Удалить питомца по ID
-      operationId: deletePet
-      responses:
-        '204':
-          description: Питомец успешно удалён (нет содержимого)
-        '404':
-          description: Питомец с указанным ID не найден
-          content:
-            application/json:
-              schema: 
-                  $ref: '#/components/schemas/Error404'
-        '400':
-          description: Некорректный запрос (например, неверный формат ID)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Внутренняя ошибка сервера
-          content:
-            application/json: 
-              schema:
-                $ref: '#/components/schemas/Error'
-        'default':
-          description: Неизвестная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/generic_error.yaml'
+    $ref: './paths/pets.yaml#/pets'
+  /api/v1/pets/{id}:
+    $ref: './paths/pets.yaml#/petById'
 
 components:
   schemas:
     Pet:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 123
-        name:
-          type: string
-          example: Fido
-        tag:
-          type: string
-          example: dog
-    NewPet:
-      type: object
-      required:
-        - name
-      properties:
-        name:
-          type: string
-          example: Fido
-        tag:
-          type: string
-          example: dog
+      $ref: './components/schemas/pet.yaml'
     Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 400
-        message:
-          type: string
-          example: "Bad Request"
-    Error404:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 404
-        message:
-          type: string
-          example: "Pet not found"
+      $ref: './components/schemas/error.yaml'
+  parameters:
+    PetId:
+      $ref: './components/parameters/id.yaml'
