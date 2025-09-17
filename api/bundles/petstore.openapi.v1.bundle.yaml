@@ -1,0 +1,136 @@
+openapi: 3.1.0
+info:
+  description: API для работы с данными о питомцах
+  title: Petstore API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Локальный сервер для разработки
+paths:
+  /api/v1/pets:
+    get:
+      post:
+        tags:
+          - pets
+        summary: Добавить нового питомца
+        operationId: createPet
+        requestBody:
+          description: Данные нового питомца
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet.yaml'
+        responses:
+          201:
+            description: Питомец успешно создан
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/pet.yaml'
+          400:
+            description: Некорректные данные
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/error.yaml'
+      summary: Получить список всех питомцев
+      parameters:
+        - name: limit
+          in: query
+          description: Максимальное количество возвращаемых питомцев
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+            minimum: 1
+            maximum:100: null
+      tags:
+        - pets
+      operationId: listPets
+      responses:
+        200:
+          description: Список питомцев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pet.yaml'
+  /api/v1/pets/{id}:
+    get:
+      tags:
+        - pets
+      summary: Получить питомца по ID
+      operationId: getPetById
+      responses:
+        200:
+          description: Данные питомца
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet.yaml'
+        404:
+          description: Питомец не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.yaml'
+    put:
+      tags:
+        - pets
+      summary: Обновить данные питомца по ID
+      operationId: updatePet
+      requestBody:
+        description: Обновлённые данные питомца
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pet.yaml'
+      responses:
+        200:
+          description: Питомец успешно обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet.yaml'
+        400:
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.yaml'
+        404:
+          description: Питомец не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.yaml'
+    delete:
+      tags:
+        - pets
+      summary: Удалить питомца по ID
+      operationId: deletePet
+      responses:
+        204:
+          description: Питомец успешно удалён
+        404:
+          description: Питомец не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.yaml'
+components:
+  parameters:
+    PetId:
+      $ref: './components/parameters/id.yaml'
+  schemas:
+    Pet:
+      $ref: './components/schemas/pet.yaml'
+    Error:
+      $ref: './components/schemas/error.yaml'
+tags:
+  - name: pets
+    description: Операции с питомцами

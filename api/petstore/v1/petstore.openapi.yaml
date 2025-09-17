@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+  title: Petstore API
+  description: API для работы с данными о питомцах
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Локальный сервер для разработки
+x-ogen:
+  package: petstore
+  module: github.com/neogan74/go-pet-store
+  go: "1.25"
+  license: MIT
+  clean: true
+tags:
+  - name: pets
+    description: Операции с питомцами
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+
+
+paths:
+  /api/v1/pets:
+    $ref: './paths/pets.yaml#/pets'
+  /api/v1/pets/{id}:
+    $ref: './paths/pets.yaml#/petById'
+
+components:
+  schemas:
+    Pet:
+      $ref: './components/schemas/pet.yaml'
+    Error:
+      $ref: './components/schemas/error.yaml'
+  parameters:
+    PetId:
+      $ref: './components/parameters/id.yaml'

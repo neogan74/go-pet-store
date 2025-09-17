@@ -7,12 +7,17 @@ vars:
   GOFUMPT_VERSION: 'v0.8.0'
   GCI_VERSION: 'v0.13.6'
   GOLANGCI_LINT_VERSION: 'v2.1.5'
+  GO_OAPI_MERGE_VERSION: 'v1.1.2'
 
   GREETING: Hello, World!
   BIN_DIR: '{{.ROOT_DIR}}/bin'
   GCI: '{{.BIN_DIR}}/gci'
   GOFUMPT: '{{.BIN_DIR}}/gofumpt'
   GOLANGCI_LINT: '{{.BIN_DIR}}/golangci-lint'
+  GO_OAPI_MERGE: '{{.BIN_DIR}}/go-oapi-merge'
+
+  OPENAPI_MAIN_FILE_PATH: '{{.ROOT_DIR}}/api/petstore/v1/petstore.openapi.yaml'
+  OPENAPI_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/api/bundles/petstore.openapi.v1.bundle.yaml'
 
 tasks:
   default:
@@ -67,3 +72,15 @@ tasks:
     deps: [ install-golangci-lint ]
     cmds:
       - '{{.GOLANGCI_LINT}} run ./... --config=.golangci.yml'
+
+  install-go-oapi-merge:
+    desc: "Устанавливаем утилиту для мержа OAPI файлов в один (замена redocli)"
+    cmds:
+      - |
+        echo "📦 Устанавливаем go-oapi-merge {{.GO_OAPI_MERGE_VERSION}}..."
+        GOBIN={{.BIN_DIR}} go install github.com/NoL1m1ts/go-oapi-merge@{{.GO_OAPI_MERGE_VERSION}}
+  go-oapi-merge:petstore-file-merge:
+    desc: Собираем единый файл спеки
+    deps: [install-go-oapi-merge]
+    cmds:
+     - '{{.GO_OAPI_MERGE}} --input {{.OPENAPI_MAIN_FILE_PATH}} --output {{.OPENAPI_RESULT_FILE_PATH}}' 
