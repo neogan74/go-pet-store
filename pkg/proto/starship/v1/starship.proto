@@ -6,97 +6,116 @@ go_package = "github.com/neogan/go-pet-store/servicespkg/proto/starship/v1;maint
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/duration.proto";
 
-// StarshipMaintenanceService provides operations for spacecraft maintenance management
+
+// StarshipMaintenanceService 
 service StarshipMaintenanceService {
-  // Maintenance Schedule Operations
-  rpc CreateMaintenanceSchedule(CreateMaintenanceScheduleRequest) returns (MaintenanceSchedule);
-  rpc GetMaintenanceSchedule(GetMaintenanceScheduleRequest) returns (MaintenanceSchedule);
-  rpc UpdateMaintenanceSchedule(UpdateMaintenanceScheduleRequest) returns (MaintenanceSchedule);
-  rpc DeleteMaintenanceSchedule(DeleteMaintenanceScheduleRequest) returns (google.protobuf.Empty);
-  rpc ListMaintenanceSchedules(ListMaintenanceSchedulesRequest) returns (ListMaintenanceSchedulesResponse);
-
-  // Maintenance Task Operations
+  // Basic CRUD operations for maintenance tasks
   rpc CreateMaintenanceTask(CreateMaintenanceTaskRequest) returns (MaintenanceTask);
   rpc GetMaintenanceTask(GetMaintenanceTaskRequest) returns (MaintenanceTask);
   rpc UpdateMaintenanceTask(UpdateMaintenanceTaskRequest) returns (MaintenanceTask);
-  rpc CompleteMaintenanceTask(CompleteMaintenanceTaskRequest) returns (MaintenanceTask);
   rpc ListMaintenanceTasks(ListMaintenanceTasksRequest) returns (ListMaintenanceTasksResponse);
-
-  // System Health Operations
-  rpc GetSystemHealth(GetSystemHealthRequest) returns (SystemHealth);
-  rpc RunDiagnostics(RunDiagnosticsRequest) returns (DiagnosticsReport);
-  rpc GetSystemMetrics(GetSystemMetricsRequest) returns (SystemMetrics);
-
-  // Maintenance History Operations
-  rpc GetMaintenanceHistory(GetMaintenanceHistoryRequest) returns (MaintenanceHistory);
-  rpc AddMaintenanceRecord(AddMaintenanceRecordRequest) returns (MaintenanceRecord);
-
-  // Resource Management
-  rpc GetMaintenanceResources(GetMaintenanceResourcesRequest) returns (MaintenanceResources);
-  rpc UpdateResourceAvailability(UpdateResourceAvailabilityRequest) returns (MaintenanceResources);
+  
+  // Basic ship operations
+  rpc GetShip(GetShipRequest) returns (Ship);
+  rpc ListShips(ListShipsRequest) returns (ListShipsResponse);
 }
 
-// Core Data Models
+// Core Data Models 
 
-message Starship {
+message Ship {
   string ship_id = 1;
   string ship_name = 2;
-  string ship_class = 3;
-  string registry_number = 4;
-  google.protobuf.Timestamp commission_date = 5;
-  StarshipStatus status = 6;
-  Location current_location = 7;
-}
-
-message MaintenanceSchedule {
-  string schedule_id = 1;
-  string ship_id = 2;
-  string schedule_name = 3;
-  ScheduleType schedule_type = 4;
-  google.protobuf.Timestamp start_time = 5;
-  google.protobuf.Timestamp end_time = 6;
-  google.protobuf.Duration estimated_duration = 7;
-  ScheduleStatus status = 8;
-  Priority priority = 9;
-  repeated MaintenanceTask tasks = 10;
-  string assigned_crew_id = 11;
-  Location maintenance_location = 12;
-  repeated string required_resources = 13;
-  string description = 14;
-  google.protobuf.Timestamp created_at = 15;
-  google.protobuf.Timestamp updated_at = 16;
+  ShipStatus status = 3;
+  google.protobuf.Timestamp created_at = 4;
 }
 
 message MaintenanceTask {
   string task_id = 1;
-  string schedule_id = 2;
-  string ship_id = 3;
-  string task_name = 4;
-  TaskType task_type = 5;
-  string system_component = 6;
-  string description = 7;
-  TaskStatus status = 8;
-  Priority priority = 9;
-  google.protobuf.Timestamp scheduled_start = 10;
-  google.protobuf.Timestamp scheduled_end = 11;
-  google.protobuf.Timestamp actual_start = 12;
-  google.protobuf.Timestamp actual_end = 13;
-  string assigned_technician = 14;
-  repeated string required_parts = 15;
-  repeated string required_tools = 16;
-  string completion_notes = 17;
-  repeated string safety_requirements = 18;
-  google.protobuf.Timestamp created_at = 19;
-  google.protobuf.Timestamp updated_at = 20;
+  string ship_id = 2;
+  string title = 3;
+  string description = 4;
+  TaskStatus status = 5;
+  Priority priority = 6;
+  string assigned_to = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+  google.protobuf.Timestamp due_date = 10;
 }
 
-message SystemHealth {
+//  Enums
+
+enum ShipStatus {
+  SHIP_STATUS_UNSPECIFIED = 0;
+  SHIP_STATUS_ACTIVE = 1;
+  SHIP_STATUS_MAINTENANCE = 2;
+  SHIP_STATUS_INACTIVE = 3;
+}
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_TODO = 1;
+  TASK_STATUS_IN_PROGRESS = 2;
+  TASK_STATUS_COMPLETED = 3;
+}
+
+enum Priority {
+  PRIORITY_UNSPECIFIED = 0;
+  PRIORITY_LOW = 1;
+  PRIORITY_MEDIUM = 2;
+  PRIORITY_HIGH = 3;
+  PRIORITY_CRITICAL = 4;
+}
+
+// Request/Response Messages
+
+message CreateMaintenanceTaskRequest {
   string ship_id = 1;
-  OverallHealthStatus overall_status = 2;
-  repeated ComponentHealth components = 3;
-  repeated Alert active_alerts = 4;
-  google.protobuf.Timestamp last_assessment = 5;
-  double health_score = 6; // 0.0 to 100.0
+  string title = 2;
+  string description = 3;
+  Priority priority = 4;
+  string assigned_to = 5;
+  google.protobuf.Timestamp due_date = 6;
+}
+
+message GetMaintenanceTaskRequest {
+  string task_id = 1;
+}
+
+message UpdateMaintenanceTaskRequest {
+  string task_id = 1;
+  string title = 2;
+  string description = 3;
+  TaskStatus status = 4;
+  Priority priority = 5;
+  string assigned_to = 6;
+  google.protobuf.Timestamp due_date = 7;
+}
+
+message ListMaintenanceTasksRequest {
+  string ship_id = 1;  // Optional filter by ship
+  TaskStatus status = 2;  // Optional filter by status
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message ListMaintenanceTasksResponse {
+  repeated MaintenanceTask tasks = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message GetShipRequest {
+  string ship_id = 1;
+}
+
+message ListShipsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message ListShipsResponse {
+  repeated Ship ships = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
 }
