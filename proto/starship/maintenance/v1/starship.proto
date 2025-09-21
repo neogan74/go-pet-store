@@ -2,11 +2,9 @@ syntax = "proto3";
 
 package starship.maintenance.v1;
 
-go_package = "github.com/neogan/go-pet-store/servicespkg/proto/starship/v1;maintenancev1";
+option go_package = "github.com/neogan/go-pet-store/servicespkg/proto/starshipmaintenance/v1;maintenance_v1";
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/empty.proto";
-
 
 // StarshipMaintenanceService 
 service StarshipMaintenanceService {
@@ -22,14 +20,14 @@ service StarshipMaintenanceService {
 }
 
 // Core Data Models 
-
+// Snip - is object represent start ship
 message Ship {
   string ship_id = 1;
   string ship_name = 2;
   ShipStatus status = 3;
   google.protobuf.Timestamp created_at = 4;
 }
-
+// Maintenance Task object - represent a maintenance task for a starship
 message MaintenanceTask {
   string task_id = 1;
   string ship_id = 2;
@@ -44,21 +42,21 @@ message MaintenanceTask {
 }
 
 //  Enums
-
+// Ship Status object - represent current status of a starship
 enum ShipStatus {
   SHIP_STATUS_UNSPECIFIED = 0;
   SHIP_STATUS_ACTIVE = 1;
   SHIP_STATUS_MAINTENANCE = 2;
   SHIP_STATUS_INACTIVE = 3;
 }
-
+// Task Status object - represent current status of a maintenance task
 enum TaskStatus {
   TASK_STATUS_UNSPECIFIED = 0;
   TASK_STATUS_TODO = 1;
   TASK_STATUS_IN_PROGRESS = 2;
   TASK_STATUS_COMPLETED = 3;
 }
-
+// Priority object - represent priority level of a maintenance task
 enum Priority {
   PRIORITY_UNSPECIFIED = 0;
   PRIORITY_LOW = 1;
@@ -68,7 +66,7 @@ enum Priority {
 }
 
 // Request/Response Messages
-
+// Requests and responses for service methods
 message CreateMaintenanceTaskRequest {
   string ship_id = 1;
   string title = 2;
@@ -77,11 +75,11 @@ message CreateMaintenanceTaskRequest {
   string assigned_to = 5;
   google.protobuf.Timestamp due_date = 6;
 }
-
+// GetMaintenanceTaskRequest - request to get a specific maintenance task by ID
 message GetMaintenanceTaskRequest {
   string task_id = 1;
 }
-
+// UpdateMaintenanceTaskRequest - request to update an existing maintenance task
 message UpdateMaintenanceTaskRequest {
   string task_id = 1;
   string title = 2;
@@ -91,29 +89,29 @@ message UpdateMaintenanceTaskRequest {
   string assigned_to = 6;
   google.protobuf.Timestamp due_date = 7;
 }
-
+// ListMaintenanceTasksRequest - request to list maintenance tasks with optional filters
 message ListMaintenanceTasksRequest {
   string ship_id = 1;  // Optional filter by ship
   TaskStatus status = 2;  // Optional filter by status
   int32 page_size = 3;
   string page_token = 4;
 }
-
+// ListMaintenanceTasksResponse - response containing a list of maintenance tasks
 message ListMaintenanceTasksResponse {
   repeated MaintenanceTask tasks = 1;
   string next_page_token = 2;
   int32 total_count = 3;
 }
-
+// GetShipRequest - request to get a specific ship by ID
 message GetShipRequest {
   string ship_id = 1;
 }
-
+// ListShipsRequest - request to list ships with pagination
 message ListShipsRequest {
   int32 page_size = 1;
   string page_token = 2;
 }
-
+// ListShipsResponse - response containing a list of ships
 message ListShipsResponse {
   repeated Ship ships = 1;
   string next_page_token = 2;
