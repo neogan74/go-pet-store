@@ -37,3 +37,66 @@ service StarshipMaintenanceService {
   rpc GetMaintenanceResources(GetMaintenanceResourcesRequest) returns (MaintenanceResources);
   rpc UpdateResourceAvailability(UpdateResourceAvailabilityRequest) returns (MaintenanceResources);
 }
+
+// Core Data Models
+
+message Starship {
+  string ship_id = 1;
+  string ship_name = 2;
+  string ship_class = 3;
+  string registry_number = 4;
+  google.protobuf.Timestamp commission_date = 5;
+  StarshipStatus status = 6;
+  Location current_location = 7;
+}
+
+message MaintenanceSchedule {
+  string schedule_id = 1;
+  string ship_id = 2;
+  string schedule_name = 3;
+  ScheduleType schedule_type = 4;
+  google.protobuf.Timestamp start_time = 5;
+  google.protobuf.Timestamp end_time = 6;
+  google.protobuf.Duration estimated_duration = 7;
+  ScheduleStatus status = 8;
+  Priority priority = 9;
+  repeated MaintenanceTask tasks = 10;
+  string assigned_crew_id = 11;
+  Location maintenance_location = 12;
+  repeated string required_resources = 13;
+  string description = 14;
+  google.protobuf.Timestamp created_at = 15;
+  google.protobuf.Timestamp updated_at = 16;
+}
+
+message MaintenanceTask {
+  string task_id = 1;
+  string schedule_id = 2;
+  string ship_id = 3;
+  string task_name = 4;
+  TaskType task_type = 5;
+  string system_component = 6;
+  string description = 7;
+  TaskStatus status = 8;
+  Priority priority = 9;
+  google.protobuf.Timestamp scheduled_start = 10;
+  google.protobuf.Timestamp scheduled_end = 11;
+  google.protobuf.Timestamp actual_start = 12;
+  google.protobuf.Timestamp actual_end = 13;
+  string assigned_technician = 14;
+  repeated string required_parts = 15;
+  repeated string required_tools = 16;
+  string completion_notes = 17;
+  repeated string safety_requirements = 18;
+  google.protobuf.Timestamp created_at = 19;
+  google.protobuf.Timestamp updated_at = 20;
+}
+
+message SystemHealth {
+  string ship_id = 1;
+  OverallHealthStatus overall_status = 2;
+  repeated ComponentHealth components = 3;
+  repeated Alert active_alerts = 4;
+  google.protobuf.Timestamp last_assessment = 5;
+  double health_score = 6; // 0.0 to 100.0
+}
