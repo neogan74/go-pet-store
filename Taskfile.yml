@@ -9,6 +9,9 @@ vars:
   GOLANGCI_LINT_VERSION: 'v2.1.5'
   GO_OAPI_MERGE_VERSION: 'v1.1.2'
   OAPI_CODEGEN_VERSION: 'v2.4.0'
+  BUF_VERSION: '1.53.0'
+  PROTOC_GEN_GO_VERSION: 'v1.36.6'
+  PROTOC_GEN_GO_GRPC_VERSION: 'v1.5.1'
 
   GREETING: Hello, World!
   BIN_DIR: '{{.ROOT_DIR}}/bin'
@@ -16,6 +19,10 @@ vars:
   GOFUMPT: '{{.BIN_DIR}}/gofumpt'
   GOLANGCI_LINT: '{{.BIN_DIR}}/golangci-lint'
   GO_OAPI_MERGE: '{{.BIN_DIR}}/go-oapi-merge'
+  BUF: '{{.BIN_DIR}}/buf'
+  PROTOC_GEN_GO: '{{.BIN_DIR}}/protoc-gen-go'
+  PROTOC_GEN_GO_GRPC: '{{.BIN_DIR}}/protoc-gen-go-grpc'
+
 
   OPENAPI_MAIN_FILE_PATH: '{{.ROOT_DIR}}/api/petstore/v1/petstore.openapi.yaml'
   OPENAPI_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/api/bundles/petstore.openapi.v1.bundle.yaml'
@@ -112,3 +119,42 @@ tasks:
       - |
         echo "🛠  Генерируем код по OpenAPI спецификации..."
         {{.BIN_DIR}}/oapi-codegen -config .oapi-codegen-ping.yaml {{.OPENAPI_PING_FILE_PATH}}
+      
+  install-buf:
+    desc: "Устанавливает Buf в каталог bin"
+    cmds:
+      - |
+        mkdir -p {{.BIN_DIR}}
+        [ -f {{.BUF}} ] || {
+          echo '📦 Устанавливаем buf {{.BUF_VERSION}}...'
+          GOBIN={{.BIN_DIR}} go install github.com/bufbuild/buf/cmd/buf@v{{.BUF_VERSION}}
+        }
+    status:
+      - test -x {{.BUF}}
+
+  proto:install-plugins:
+    desc: "Устанавливает protoc плагины в каталог bin"
+    cmds:
+      - |
+        [ -f {{.PROTOC_GEN_GO}} ] || {
+          echo '📦 Installing protoc-gen-go...'
+          GOBIN={{.BIN_DIR}} go install google.golang.org/protobuf/cmd/protoc-gen-go@{{.PROTOC_GEN_GO_VERSION}}
+        }
+        [ -f {{.PROTOC_GEN_GO_GRPC}} ] || {
+          echo '📦 Installing protoc-gen-go-grpc...'
+          GOBIN={{.BIN_DIR}} go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@{{.PROTOC_GEN_GO_GRPC_VERSION}}
+        }
+
+  proto:lint:
+    deps: [ install-buf, proto:install-plugins ]
+    desc: Проверка .proto-файлов на соответствие стилю
+    dir: proto
+    cmds:
+      - '{{.BUF}} lint'
+
+  proto:gen:
+    deps: [ install-buf, proto:install-plugins, proto:lint ]
+    desc: Генерация Go-кода из .proto
+    dir: proto
+    cmds:
+      - '{{.BUF}} generate'
