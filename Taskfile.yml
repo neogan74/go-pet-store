@@ -8,6 +8,7 @@ vars:
   GCI_VERSION: 'v0.13.6'
   GOLANGCI_LINT_VERSION: 'v2.1.5'
   GO_OAPI_MERGE_VERSION: 'v1.1.2'
+  OAPI_CODEGEN_VERSION: 'v2.4.0'
 
   GREETING: Hello, World!
   BIN_DIR: '{{.ROOT_DIR}}/bin'
@@ -18,6 +19,7 @@ vars:
 
   OPENAPI_MAIN_FILE_PATH: '{{.ROOT_DIR}}/api/petstore/v1/petstore.openapi.yaml'
   OPENAPI_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/api/bundles/petstore.openapi.v1.bundle.yaml'
+  OPENAPI_PING_FILE_PATH:  '{{.ROOT_DIR}}/api/bundles/ping.yaml'
 
 tasks:
   default:
@@ -84,3 +86,29 @@ tasks:
     deps: [install-go-oapi-merge]
     cmds:
      - '{{.GO_OAPI_MERGE}} --input {{.OPENAPI_MAIN_FILE_PATH}} --output {{.OPENAPI_RESULT_FILE_PATH}}' 
+  
+  oapi-codegen-install:
+    desc: "Устанавливает oapi-codegen в каталог bin"
+    cmds:
+      - |
+        [ -f {{.BIN_DIR}}/oapi-codegen ] || {
+          mkdir -p {{.BIN_DIR}}
+          echo "📦 Устанавливаем oapi-codegen ..."
+          GOBIN={{.BIN_DIR}} go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@{{.OAPI_CODEGEN_VERSION}}
+        }
+    status:
+      - test -x {{.BIN_DIR}}/oapi-codegen
+
+  oapi-generate:
+    desc: "Генерирует код по OpenAPI спецификации"
+    cmds:
+      - |
+        echo "🛠  Генерируем код по OpenAPI спецификации..."
+        {{.BIN_DIR}}/oapi-codegen -config .oapi-codegen.yaml {{.OPENAPI_RESULT_FILE_PATH}}
+
+  oapi-generate-ping:
+    desc: "Генерирует код по OpenAPI спецификации"
+    cmds:
+      - |
+        echo "🛠  Генерируем код по OpenAPI спецификации..."
+        {{.BIN_DIR}}/oapi-codegen -config .oapi-codegen-ping.yaml {{.OPENAPI_PING_FILE_PATH}}
