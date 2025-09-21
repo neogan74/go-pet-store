@@ -1,8 +1,0 @@
-package: gen
-generate:
-  types: true
-  chi-server: true
-  # можно добавить: client: true
-output: internal/gen/petstore.gen.go
-compatibility:
-  # allow-unknown-format: true

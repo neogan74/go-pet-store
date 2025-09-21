@@ -1,0 +1,40 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+required: [id, name]
+properties:
+  id:
+    type: string
+    pattern: "^[0-9a-fA-F-]{36}$"
+    description: UUID
+  name:
+    type: string
+    minLength: 1
+  tag:
+    type: string
+  age:
+    type: integer
+    minimum: 0
+additionalProperties: false
+examples:
+  dog:
+    summary: Пример питомца - собака
+    value:
+      id: "123e4567-e89b-12d3-a456-426614174000"
+      name: "Buddy"
+      tag: "dog"
+      age: 3
+  cat:
+    summary: Пример питомца - кошка
+    value:
+      id: "223e4567-e89b-12d3-a456-426614174000"
+      name: "Whiskers"
+      tag: "cat"
+      age: 2
+  fish:
+    summary: Пример питомца - рыба
+    value:
+      id: "323e4567-e89b-12d3-a456-426614174000"
+      name: "Goldie"
+      tag: "fish"
+      age: 1
