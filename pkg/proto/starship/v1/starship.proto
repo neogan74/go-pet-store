@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package starship.maintenance.v1;
+
+go_package = "github.com/neogan/go-pet-store/servicespkg/proto/starship/v1;maintenancev1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+
+// StarshipMaintenanceService provides operations for spacecraft maintenance management
+service StarshipMaintenanceService {
+  // Maintenance Schedule Operations
+  rpc CreateMaintenanceSchedule(CreateMaintenanceScheduleRequest) returns (MaintenanceSchedule);
+  rpc GetMaintenanceSchedule(GetMaintenanceScheduleRequest) returns (MaintenanceSchedule);
+  rpc UpdateMaintenanceSchedule(UpdateMaintenanceScheduleRequest) returns (MaintenanceSchedule);
+  rpc DeleteMaintenanceSchedule(DeleteMaintenanceScheduleRequest) returns (google.protobuf.Empty);
+  rpc ListMaintenanceSchedules(ListMaintenanceSchedulesRequest) returns (ListMaintenanceSchedulesResponse);
+
+  // Maintenance Task Operations
+  rpc CreateMaintenanceTask(CreateMaintenanceTaskRequest) returns (MaintenanceTask);
+  rpc GetMaintenanceTask(GetMaintenanceTaskRequest) returns (MaintenanceTask);
+  rpc UpdateMaintenanceTask(UpdateMaintenanceTaskRequest) returns (MaintenanceTask);
+  rpc CompleteMaintenanceTask(CompleteMaintenanceTaskRequest) returns (MaintenanceTask);
+  rpc ListMaintenanceTasks(ListMaintenanceTasksRequest) returns (ListMaintenanceTasksResponse);
+
+  // System Health Operations
+  rpc GetSystemHealth(GetSystemHealthRequest) returns (SystemHealth);
+  rpc RunDiagnostics(RunDiagnosticsRequest) returns (DiagnosticsReport);
+  rpc GetSystemMetrics(GetSystemMetricsRequest) returns (SystemMetrics);
+
+  // Maintenance History Operations
+  rpc GetMaintenanceHistory(GetMaintenanceHistoryRequest) returns (MaintenanceHistory);
+  rpc AddMaintenanceRecord(AddMaintenanceRecordRequest) returns (MaintenanceRecord);
+
+  // Resource Management
+  rpc GetMaintenanceResources(GetMaintenanceResourcesRequest) returns (MaintenanceResources);
+  rpc UpdateResourceAvailability(UpdateResourceAvailabilityRequest) returns (MaintenanceResources);
+}
