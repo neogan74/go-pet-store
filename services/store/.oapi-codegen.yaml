@@ -1,0 +1,7 @@
+package: api
+generate:
+  types: true
+  chi-server: true
+  models: true
+output: internal/gen/petstore.gen.go
+spec: /api/bundles/petstore.openapi.v1.bundle.yaml

@@ -1,0 +1,7 @@
+package: api
+generate:
+  types: true
+  chi-server: true
+  models: true
+output: internal/gen/ping.gen.go
+spec: /api/bundles/ping.yaml
