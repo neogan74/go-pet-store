@@ -3,3 +3,8 @@ bin/gci
 bin/golangci-lint
 main
 bin/go-oapi-merge
+bin/protoc-gen-go
+.gitignore
+.gitignore
+bin/protoc-gen-go-grpc
+bin/buf
