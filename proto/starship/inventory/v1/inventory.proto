@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package starship.inventory.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/neogan74/go-pet-store/sertvices/pkg/startship/inventory/v1;inventory_v1";
+
+// StarshipInventoryService
+service StarshipInventoryService {
+  rpc GetPart(GetPartRequest) returns (InventoryPartResponse);
+  rpc ListParts(ListPartsRequest) returns (ListInventoryPartsResponse);
+}
+
+// Part spare part struct
+message Part {
+  string uuid = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int64 stock_quantity = 5;
+  repeated Category category = 6;
+  Dimentions dimentions = 7;
+  Manufacturer manufacturer = 8;
+  repeated string tags = 9;
+  map<string,Value> metadata = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}
+
+// Category enum
+enum Category {
+  CATEGORY_UNKNOWN_UNSPECIFIED = 0;
+  CATEGORY_ENGINE = 1;
+  CATEGORY_FUEL = 2;
+  CATEGORY_PORTHOLE = 3;
+  CATEGORY_WING = 4;
+}
+
+// Dimentions
+message Dimentions {
+  double length = 1;
+  double width = 2;
+  double height = 3;
+  double weiht = 4;
+}
+
+// Manufacturer
+message Manufacturer {
+  string name = 1;
+  string country = 2;
+  string website = 3;
+}
+
+// PartsFilter
+message PartsFilter {
+  repeated string uuids = 1;
+  repeated string names = 2;
+  repeated Category categories = 3;
+  repeated string manufacturer_countries = 4;
+  repeated string tags = 5;
+}
+
+// Reqests/Response messages
+// GetInventoryPartRequest
+message GetPartRequest{
+  string uuid = 1;
+}
+
+// InventoryPartResponse retunrs uuid of spare part
+message InventoryPartResponse {
+  string uuid = 1;
+}
+
+// ListInventoryPartsRequest  request
+message ListPartsRequest{
+  PartsFilter filter = 1;
+}
+
+// ListInventoryPartsResponse
+message ListInventoryPartsResponse {
+  repeated Part parts = 1;
+}
+
+// Value for metadata value
+message Value {
+  oneof metadata_oneof {
+    string string_value = 1;
+    int64  int64_value = 2;
+    double double_value = 3;
+    bool bool_value = 4;
+  }
+}
