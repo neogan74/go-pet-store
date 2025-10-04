@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package starship.maintenance.v1;
 
-option go_package = "github.com/neogan/go-pet-store/servicespkg/proto/starshipmaintenance/v1;maintenance_v1";
+option go_package = "github.com/neogan74/go-pet-store/services/pkg/proto/starship/maintenance/v1;maintenance_v1";
 
 import "google/protobuf/timestamp.proto";
 
