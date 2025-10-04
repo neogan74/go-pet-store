@@ -64,9 +64,15 @@ func main() {
 
 	service := &inventoryService{}
 
+	// generate some db
+	service.parts = make(map[string]*InventorySvc.Part)
+	service.parts["body"] = &InventorySvc.Part{Uuid: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5", Name: "body"}
+	service.parts["wing"] = &InventorySvc.Part{Uuid: "f485dcc2-a2f3-4a7c-a3b0-5a1b6652b3a0", Name: "wing"}
+	service.parts["engine"] = &InventorySvc.Part{Uuid: "e5c46c2d-961c-469b-a040-6714d5c71320", Name: "wing"}
+
 	InventorySvc.RegisterStarshipInventoryServiceServer(server, service)
 
-	listner, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -74,7 +80,7 @@ func main() {
 	reflection.Register(server)
 
 	log.Println("Starting inventory service")
-	if err := server.Serve(listner); err != nil {
+	if err := server.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }
