@@ -7,7 +7,6 @@ import (
 	"net"
 	"sync"
 
-	"github.com/google/uuid"
 	InventorySvc "github.com/neogan74/go-pet-store/shared/pkg/proto/starship/inventory/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -27,17 +26,13 @@ type inventoryService struct {
 func (is *inventoryService) GetPart(_ context.Context, req *InventorySvc.GetPartRequest) (*InventorySvc.InventoryPartResponse, error) {
 	is.mu.Lock()
 	defer is.mu.Unlock()
-	newId := uuid.NewString()
 
-	partid, ok := is.parts[newId]
+	partid, ok := is.parts[req.Uuid]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "partid not found")
 	}
-	if req.Uuid != partid.Uuid {
-		newId = req.Uuid
-	}
 	part := &InventorySvc.InventoryPartResponse{
-		Uuid: newId,
+		Uuid: partid.Uuid,
 	}
 
 	return part, nil
@@ -67,9 +62,9 @@ func main() {
 
 	// generate some db
 	service.parts = make(map[string]*InventorySvc.Part)
-	service.parts["body"] = &InventorySvc.Part{Uuid: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5", Name: "body", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_PORTHOLE}}
-	service.parts["wing"] = &InventorySvc.Part{Uuid: "f485dcc2-a2f3-4a7c-a3b0-5a1b6652b3a0", Name: "wing", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_WING}}
-	service.parts["engine"] = &InventorySvc.Part{Uuid: "e5c46c2d-961c-469b-a040-6714d5c71320", Name: "engine", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_ENGINE}}
+	service.parts["c0eadac2-c9a3-47b9-ad28-9791f75bcba5"] = &InventorySvc.Part{Uuid: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5", Name: "body", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_PORTHOLE}}
+	service.parts["f485dcc2-a2f3-4a7c-a3b0-5a1b6652b3a0"] = &InventorySvc.Part{Uuid: "f485dcc2-a2f3-4a7c-a3b0-5a1b6652b3a0", Name: "wing", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_WING}}
+	service.parts["e5c46c2d-961c-469b-a040-6714d5c71320"] = &InventorySvc.Part{Uuid: "e5c46c2d-961c-469b-a040-6714d5c71320", Name: "engine", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_ENGINE}}
 
 	InventorySvc.RegisterStarshipInventoryServiceServer(server, service)
 
