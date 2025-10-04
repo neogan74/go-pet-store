@@ -1,7 +1,7 @@
-go 1.24
+go 1.24.4
 
 use (
-    ./services/users
-    ./services/order
-    ./services/inventory
+	./services/inventory
+	./services/orders
+	./services/users
 )
