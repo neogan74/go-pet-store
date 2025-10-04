@@ -47,9 +47,10 @@ func (is *inventoryService) ListParts(_ context.Context, req *InventorySvc.ListP
 	is.mu.Lock()
 	defer is.mu.Unlock()
 
-	listParts := []*InventorySvc.Part{
-		&InventorySvc.Part{Uuid: uuid.NewString(), Name: "body"},
-		&InventorySvc.Part{Uuid: uuid.NewString(), Name: "engine"},
+	listParts := make([]*InventorySvc.Part, 0)
+	for key, value := range is.parts {
+		fmt.Printf("%v -> %V\n", key, value)
+		listParts = append(listParts, value)
 	}
 
 	partRes := &InventorySvc.ListInventoryPartsResponse{
@@ -66,9 +67,9 @@ func main() {
 
 	// generate some db
 	service.parts = make(map[string]*InventorySvc.Part)
-	service.parts["body"] = &InventorySvc.Part{Uuid: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5", Name: "body"}
-	service.parts["wing"] = &InventorySvc.Part{Uuid: "f485dcc2-a2f3-4a7c-a3b0-5a1b6652b3a0", Name: "wing"}
-	service.parts["engine"] = &InventorySvc.Part{Uuid: "e5c46c2d-961c-469b-a040-6714d5c71320", Name: "wing"}
+	service.parts["body"] = &InventorySvc.Part{Uuid: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5", Name: "body", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_PORTHOLE}}
+	service.parts["wing"] = &InventorySvc.Part{Uuid: "f485dcc2-a2f3-4a7c-a3b0-5a1b6652b3a0", Name: "wing", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_WING}}
+	service.parts["engine"] = &InventorySvc.Part{Uuid: "e5c46c2d-961c-469b-a040-6714d5c71320", Name: "engine", Category: []InventorySvc.Category{InventorySvc.Category_CATEGORY_ENGINE}}
 
 	InventorySvc.RegisterStarshipInventoryServiceServer(server, service)
 
