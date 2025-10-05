@@ -1,43 +1,43 @@
-post:
-  summary: Проведение оплаты созданного ранее заказа
-  operationId: OrderPay
-  tags:
-    - Order
-  requestBody:
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: ../components/order_pay_by_id.yaml
-  responses:
-    '200':
-      description: Order successfully updated
+payOrder:
+  post:
+    summary: Проведение оплаты созданного ранее заказа
+    operationId: OrderPay
+    tags:
+      - Order
+    requestBody:
+      required: true
       content:
         application/json:
           schema:
-            $ref: ../components/order_paid.yaml
-    '400':
-      description: Bad request - validation error
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/bad_request_error.yaml"
-    '404':
-      description: Not found
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/not_found_error.yaml"
-    '500':
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/internal_server_error.yaml"
-    default:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: ../components/errors/generic_error.yaml
-
+            $ref: ../components/order_pay_by_id.yaml
+    responses:
+      '200':
+        description: Order successfully updated
+        content:
+          application/json:
+            schema:
+              $ref: ../components/order_paid.yaml
+      '400':
+        description: Bad request - validation error
+        content:
+          application/json:
+            schema:
+              $ref: "../components/errors/bad_request_error.yaml"
+      '404':
+        description: Not found
+        content:
+          application/json:
+            schema:
+              $ref: "../components/errors/not_found_error.yaml"
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: "../components/errors/internal_server_error.yaml"
+      default:
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: ../components/errors/generic_error.yaml

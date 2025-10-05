@@ -14,10 +14,10 @@ tags:
 
 paths:
   /api/order/v1/:
-    $ref: ./paths/create_order.yaml
+    $ref: './paths/create_order.yaml#/createOrder'
   /api/order/v1/{order_uuid}:
-    $ref: "./paths/order_by_uuid.yaml"
+    $ref: './paths/order_by_uuid.yaml#/orderByUUID'
   /api/order/v1/{order_uuid}/pay:
-    $ref: "./paths/orderid_pay.yaml"
+    $ref: './paths/orderid_pay.yaml#/payOrder'
   /api/v1/orders/{order_uuid}/cancel:
-    $ref: "./paths/order_cancel.yaml"
+    $ref: './paths/order_cancel.yaml#/cancelOrder'

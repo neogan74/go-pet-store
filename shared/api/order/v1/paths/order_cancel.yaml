@@ -1,35 +1,37 @@
-put:
-  summary: Create order
-  operationId: UpdateOrderbyUUID
-  tags:
-    - Order
-  responses:
-    '204':
-      description: Order successfully calceled
-      content:
-        application/json:
-          $ref: "../components/order_canceled.yaml"
-    '400':
-      description: Bad request - validation error
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/bad_request_error.yaml"
-    '409':
-      description: Order already paide and cannot be canceled
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/order_cannot_be_canceled.yaml"
-    '500':
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/internal_server_error.yaml"
-    default:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: ../components/errors/generic_error.yaml
+cancelOrder:
+  put:
+    summary: Create order
+    operationId: UpdateOrderbyUUID
+    tags:
+      - Order
+    responses:
+      '204':
+        description: Order successfully calceled
+        content:
+          application/json:
+            schema:
+              $ref: "../components/order_canceled.yaml"
+      '400':
+        description: Bad request - validation error
+        content:
+          application/json:
+            schema:
+              $ref: "../components/errors/bad_request_error.yaml"
+      '409':
+        description: Order already paide and cannot be canceled
+        content:
+          application/json:
+            schema:
+              $ref: "../components/errors/order_cannot_be_canceled.yaml"
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: "../components/errors/internal_server_error.yaml"
+      default:
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: ../components/errors/generic_error.yaml
