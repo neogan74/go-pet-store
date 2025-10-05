@@ -1,0 +1,11 @@
+post:
+  summary: Проведение оплаты созданного ранее заказа
+  operationId: OrderPay
+  tags:
+    - Order
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/order_pay_by_id.yaml

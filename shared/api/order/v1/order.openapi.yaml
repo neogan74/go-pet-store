@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: OrderService API
+  version: 1.0.0
+  description: API для работы с Startship зказов
+x-ogen:
+  target: ./shared/pkg/openapi/order/v1
+  package: order_v1
+  clean: true
+
+tags:
+  - name: Order
+    description: Операции с данными о заказах — получение и обновление информации
+
+paths:
+  /api/order/v1/{}:
+    $ref: ./paths/order_by_uuid.yaml
+  /api/order/v1/{order_uuid}/pay:
+    $ref: "./paths/orderid_pay.yaml"

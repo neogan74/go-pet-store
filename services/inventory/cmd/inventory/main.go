@@ -42,11 +42,15 @@ func (is *inventoryService) ListParts(_ context.Context, req *InventorySvc.ListP
 	is.mu.Lock()
 	defer is.mu.Unlock()
 
+	filter := req.Filter
+	fmt.Printf("Filter: %v\n", filter)
+
 	listParts := make([]*InventorySvc.Part, 0)
 	for key, value := range is.parts {
 		fmt.Printf("%v -> %V\n", key, value)
 		listParts = append(listParts, value)
 	}
+	// TODO: Implement filtering
 
 	partRes := &InventorySvc.ListInventoryPartsResponse{
 		Parts: listParts,

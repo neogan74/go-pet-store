@@ -1,0 +1,19 @@
+type: object
+required:
+  - user_uuid
+  - part_uuid
+properties:
+  user_uuid:
+    type: string
+    description: id юзера
+    minLength: 36
+    maxLength: 36
+    example: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5"
+  parts_uuids:
+    type: array
+    items:
+      type: string
+      description: IDs of parts in order
+      maxLength: 36
+      minLength: 36
+      example: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5"
