@@ -1,4 +1,3 @@
-
 get:
   summary: Get orders for building startship
   operationId: GetOrders
@@ -10,7 +9,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../components/order.yaml
+            $ref: ../components/order_by_id.yaml
     '404':
       description: Orders not found
       content:
@@ -29,42 +28,6 @@ get:
         application/json:
           schema:
             $ref: ../components/errors/internal_server_error.yaml
-    default:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: ../components/errors/generic_error.yaml
-put:
-  summary: Create order
-  operationId: UpdateOrderbyUUID
-  tags:
-    - Order
-  requestBody:
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: "../components/update_order_request.yaml"
-  responses:
-    '200':
-      description: Order successfully updated
-      content:
-        application/json:
-          schema:
-            $ref: ../components/order.yaml
-    '400':
-      description: Bad request - validation error
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/bad_request_error.yaml"
-    '500':
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/internal_server_error.yaml"
     default:
       description: Unexpected error
       content:

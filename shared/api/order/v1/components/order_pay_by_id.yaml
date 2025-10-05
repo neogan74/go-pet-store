@@ -7,4 +7,6 @@ properties:
     enum:
       - "CARD"
       - "CASH"
+      - "SBP"
+      - "CREDIT"
     example: "CARD"

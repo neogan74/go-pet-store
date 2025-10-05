@@ -27,6 +27,8 @@ vars:
   OPENAPI_MAIN_FILE_PATH: '{{.ROOT_DIR}}/api/petstore/v1/petstore.openapi.yaml'
   OPENAPI_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/api/bundles/petstore.openapi.v1.bundle.yaml'
   OPENAPI_PING_FILE_PATH:  '{{.ROOT_DIR}}/api/bundles/ping.yaml'
+  OPENAPI_ORDER_FILE_PATH: '{{.ROOT_DIR}}/shared/api/order/v1/order.openapi.yaml'
+  OPENAPI_OREDR_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/shared/api/bundles/order.openapi.v1.bundle.yaml'
 
 tasks:
   default:
@@ -119,7 +121,20 @@ tasks:
       - |
         echo "🛠  Генерируем код по OpenAPI спецификации..."
         {{.BIN_DIR}}/oapi-codegen -config .oapi-codegen-ping.yaml {{.OPENAPI_PING_FILE_PATH}}
-      
+
+  go-oapi-merge:order-svc-file-merge:
+    desc: Собираем единый файл спеки
+    deps: [install-go-oapi-merge]
+    cmds:
+      - '{{.GO_OAPI_MERGE}} --input {{.OPENAPI_ORDER_FILE_PATH}} --output {{.OPENAPI_OREDR_RESULT_FILE_PATH}}'
+
+  oapi-generate-order:
+    desc: "Генерирует код по OpenAPI спецификации"
+    cmds:
+      - |
+        echo "🛠  Генерируем код по OpenAPI спецификации..."
+        {{.BIN_DIR}}/oapi-codegen -config .oapi-codegen-ping.yaml {{.OPENAPI_PING_FILE_PATH}}
+
   install-buf:
     desc: "Устанавливает Buf в каталог bin"
     cmds:

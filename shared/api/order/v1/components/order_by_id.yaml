@@ -1,0 +1,58 @@
+type: object
+required:
+  - order_uuid
+  - user_uuid
+  - part_uuids
+  - total_price
+  - transaction_uuid
+  - payment_method
+  - status
+properties:
+  order_uuid:
+    type: string
+    description: id юзера
+    minLength: 36
+    maxLength: 36
+    example: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5"
+  user_uuid:
+    type: string
+    description: id юзера
+    minLength: 36
+    maxLength: 36
+    example: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5"
+  parts_uuids:
+    type: array
+    items:
+      type: string
+      description: IDs of parts in order
+      maxLength: 36
+      minLength: 36
+      example: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5"
+  total_price:
+    type: number
+    format: float
+    description: Total price of order
+    maxLength: 1
+    minLength: 100
+    example: 3.35
+  transaction_uuid:
+    type: string
+    description: id юзера
+    minLength: 36
+    maxLength: 36
+    example: "c0eadac2-c9a3-47b9-ad28-9791f75bcba5"
+  payment_method:
+    type: string
+    enum:
+      - "CARD"
+      - "CASH"
+      - "SBP"
+      - "CREDIT"
+    example: "CARD"
+  status:
+    type: string
+    enum:
+      - "CREATED"
+      - "PAID"
+      - "CANCELED"
+    example: "CREATED"

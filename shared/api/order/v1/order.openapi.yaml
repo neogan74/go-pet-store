@@ -13,7 +13,11 @@ tags:
     description: Операции с данными о заказах — получение и обновление информации
 
 paths:
-  /api/order/v1/{}:
-    $ref: ./paths/order_by_uuid.yaml
+  /api/order/v1/:
+    $ref: ./paths/create_order.yaml
+  /api/order/v1/{order_uuid}:
+    $ref: "./paths/order_by_uuid.yaml"
   /api/order/v1/{order_uuid}/pay:
     $ref: "./paths/orderid_pay.yaml"
+  /api/v1/orders/{order_uuid}/cancel:
+    $ref: "./paths/order_cancel.yaml"

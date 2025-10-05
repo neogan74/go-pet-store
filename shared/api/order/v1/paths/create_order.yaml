@@ -1,6 +1,6 @@
-post:
-  summary: Проведение оплаты созданного ранее заказа
-  operationId: OrderPay
+put:
+  summary: Create order
+  operationId: CreateOrder
   tags:
     - Order
   requestBody:
@@ -8,26 +8,20 @@ post:
     content:
       application/json:
         schema:
-          $ref: ../components/order_pay_by_id.yaml
+          $ref: "../components/update_order_request.yaml"
   responses:
     '200':
       description: Order successfully updated
       content:
         application/json:
           schema:
-            $ref: ../components/order_paid.yaml
+            $ref: "../components/order_created.yaml"
     '400':
       description: Bad request - validation error
       content:
         application/json:
           schema:
             $ref: "../components/errors/bad_request_error.yaml"
-    '404':
-      description: Not found
-      content:
-        application/json:
-          schema:
-            $ref: "../components/errors/not_found_error.yaml"
     '500':
       description: Internal server error
       content:
@@ -39,5 +33,4 @@ post:
       content:
         application/json:
           schema:
-            $ref: ../components/errors/generic_error.yaml
-
+            $ref: "../components/errors/generic_error.yaml"
