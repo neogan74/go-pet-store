@@ -1,5 +1,5 @@
 pets:
-  get: 
+  get:
     tags: [pets]
     summary: Получить список всех питомцев
     operationId: listPets
@@ -8,7 +8,12 @@ pets:
         in: query
         description: Максимальное количество возвращаемых питомцев
         required: false
-        schema: {type: integer, format: int32, minimum: 1, maximum:100, default: 10}
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 100
+          default: 10
     responses:
       '200':
         description: Список питомцев
@@ -17,34 +22,37 @@ pets:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/pet.yaml'
+                $ref: '../components/schemas/pet.yaml'
 
-    post:
-      tags: [pets]
-      summary: Добавить нового питомца
-      operationId: createPet
-      requestBody:
-        description: Данные нового питомца
-        required: true
+  post:
+    tags: [pets]
+    summary: Добавить нового питомца
+    operationId: createPet
+    requestBody:
+      description: Данные нового питомца
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/pet.yaml'
+    responses:
+      '201':
+        description: Питомец успешно создан
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pet.yaml'
-      responses:
-        '201':
-          description: Питомец успешно создан
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/pet.yaml'
-        '400':
-          description: Некорректные данные
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.yaml'
+              $ref: '../components/schemas/pet.yaml'
+      '400':
+        description: Некорректные данные
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/error.yaml'
+
 petById:
-  get: 
+  parameters:
+    - $ref: '../components/parameters/id.yaml'
+  get:
     tags: [pets]
     summary: Получить питомца по ID
     operationId: getPetById
@@ -54,13 +62,14 @@ petById:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pet.yaml'
+              $ref: '../components/schemas/pet.yaml'
       '404':
         description: Питомец не найден
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/error.yaml'
+              $ref: '../components/schemas/error.yaml'
+
   delete:
     tags: [pets]
     summary: Удалить питомца по ID
@@ -73,7 +82,8 @@ petById:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/error.yaml'
+              $ref: '../components/schemas/error.yaml'
+
   put:
     tags: [pets]
     summary: Обновить данные питомца по ID
@@ -84,23 +94,23 @@ petById:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/pet.yaml'
+            $ref: '../components/schemas/pet.yaml'
     responses:
       '200':
         description: Питомец успешно обновлён
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pet.yaml'
+              $ref: '../components/schemas/pet.yaml'
       '400':
         description: Некорректные данные
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/error.yaml'
+              $ref: '../components/schemas/error.yaml'
       '404':
         description: Питомец не найден
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/error.yaml'
+              $ref: '../components/schemas/error.yaml'
