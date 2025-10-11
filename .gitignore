@@ -8,3 +8,4 @@ bin/protoc-gen-go
 .gitignore
 bin/protoc-gen-go-grpc
 bin/buf
+/.idea/*
