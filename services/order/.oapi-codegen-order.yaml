@@ -2,4 +2,4 @@ package: api
 generate:
   chi-server: true
   models: true
-output: internal/gen/order.gen.go
+output: services/order/internal/gen/order.gen.go
