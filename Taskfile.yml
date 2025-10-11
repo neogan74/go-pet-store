@@ -29,7 +29,7 @@ vars:
   OPENAPI_PING_FILE_PATH:  '{{.ROOT_DIR}}/services/store/api/bundles/ping.yaml'
   ## Order
   OPENAPI_ORDER_FILE_PATH: '{{.ROOT_DIR}}/shared/api/order/v1/order.openapi.yaml'
-  OPENAPI_ORDER_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/shared/api/bundles/order.openapi.v1.bundle.yaml'
+  OPENAPI_ORDER_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/shared/api/order/v1/bundles/order.bundle.yaml'
   ORDER_CODEGEN_FILE_PATH: '{{.ROOT_DIR}}/services/order/.oapi-codegen-order.yaml'
 
 tasks:
