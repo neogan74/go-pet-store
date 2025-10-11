@@ -1,59 +1,12 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
+  description: API для работы с данными о питомцах
   title: Petstore API
   version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Локальный сервер для разработки
 paths:
-  /api/v1/pets:
-    get:
-      post:
-        tags:
-          - pets
-        summary: Добавить нового питомца
-        operationId: createPet
-        requestBody:
-          description: Данные нового питомца
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/pet.yaml'
-        responses:
-          201:
-            description: Питомец успешно создан
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/pet.yaml'
-          400:
-            description: Некорректные данные
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error.yaml'
-      summary: Получить список всех питомцев
-      parameters:
-        - name: limit
-          in: query
-          description: Максимальное количество возвращаемых питомцев
-          required: false
-          schema:
-            type: integer
-            format: int32
-            default: 10
-            minimum: 1
-            maximum:100: null
-      tags:
-        - pets
-      operationId: listPets
-      responses:
-        200:
-          description: Список питомцев
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/pet.yaml'
   /api/v1/pets/{id}:
     get:
       tags:
@@ -66,13 +19,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/pet.yaml'
+                $ref: '../components/schemas/pet.yaml'
         404:
           description: Питомец не найден
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error.yaml'
+                $ref: '../components/schemas/error.yaml'
     put:
       tags:
         - pets
@@ -84,26 +37,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pet.yaml'
+              $ref: '../components/schemas/pet.yaml'
       responses:
         200:
           description: Питомец успешно обновлён
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/pet.yaml'
+                $ref: '../components/schemas/pet.yaml'
         400:
           description: Некорректные данные
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error.yaml'
+                $ref: '../components/schemas/error.yaml'
         404:
           description: Питомец не найден
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error.yaml'
+                $ref: '../components/schemas/error.yaml'
     delete:
       tags:
         - pets
@@ -117,16 +70,99 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error.yaml'
+                $ref: '../components/schemas/error.yaml'
+    parameters:
+      - $ref: '../components/parameters/id.yaml'
+  /api/v1/pets:
+    get:
+      summary: Получить список всех питомцев
+      parameters:
+        - name: limit
+          in: query
+          description: Максимальное количество возвращаемых питомцев
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+            maximum: 100
+            minimum: 1
+      operationId: listPets
+      responses:
+        200:
+          description: Список питомцев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../components/schemas/pet.yaml'
+      tags:
+        - pets
+    post:
+      tags:
+        - pets
+      summary: Добавить нового питомца
+      operationId: createPet
+      requestBody:
+        description: Данные нового питомца
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/pet.yaml'
+      responses:
+        201:
+          description: Питомец успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/pet.yaml'
+        400:
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/error.yaml'
 components:
-  parameters:
-    PetId:
-      $ref: './components/parameters/id.yaml'
-  schemas:
-    Pet:
-      $ref: './components/schemas/pet.yaml'
-    Error:
-      $ref: './components/schemas/error.yaml'
+  examples:
+    dog:
+      summary: Пример питомца - собака
+      value:
+        id: 123e4567-e89b-12d3-a456-426614174000
+        name: Buddy
+        tag: dog
+        age: 3
+    cat:
+      summary: Пример питомца - кошка
+      value:
+        id: 223e4567-e89b-12d3-a456-426614174000
+        name: Whiskers
+        tag: cat
+        age: 2
+    fish:
+      summary: Пример питомца - рыба
+      value:
+        name: Goldie
+        tag: fish
+        age: 1
+        id: 323e4567-e89b-12d3-a456-426614174000
+    invalidInput:
+      summary: Некорректные данные
+      value:
+        message: Некорректные данные
+        code: 400
+    notFound:
+      summary: Питомец не найден
+      value:
+        code: 404
+        message: Питомец не найден
+    validId:
+      summary: Корректный UUID
+      value: 123e4567-e89b-12d3-a456-426614174000
+    invalidId:
+      summary: Некорректный UUID
+      value: invalid-uuid
 tags:
   - name: pets
     description: Операции с питомцами
