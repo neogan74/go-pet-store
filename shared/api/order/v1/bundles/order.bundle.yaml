@@ -1,0 +1,188 @@
+openapi: 3.0.3
+info:
+  description: API для работы с Startship зказов
+  title: OrderService API
+  version: 1.0.0
+paths:
+  /api/order/v1/:
+    put:
+      tags:
+        - Order
+      summary: Create order
+      operationId: CreateOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/update_order_request.yaml'
+      responses:
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/generic_error.yaml'
+        200:
+          description: Order successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '../components/order_created.yaml'
+        400:
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/bad_request_error.yaml'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/internal_server_error.yaml'
+  /api/order/v1/{order_uuid}:
+    get:
+      summary: Get orders for building startship
+      parameters:
+        - name: order_uuid
+          in: path
+          description: UUID of the order
+          required: true
+          schema:
+            type: string
+            format: uuid
+      operationId: GetOrders
+      tags:
+        - Order
+      responses:
+        404:
+          description: Orders not found
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/not_found_error.yaml'
+        400:
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/bad_request_error.yaml'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/internal_server_error.yaml'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/generic_error.yaml'
+        200:
+          description: Orders sucessfuly provided
+          content:
+            application/json:
+              schema:
+                $ref: '../components/order_by_id.yaml'
+  /api/order/v1/{order_uuid}/pay:
+    post:
+      summary: Проведение оплаты созданного ранее заказа
+      parameters:
+        - name: order_uuid
+          in: path
+          description: UUID of the order
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/order_pay_by_id.yaml'
+      responses:
+        200:
+          description: Order successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '../components/order_paid.yaml'
+        400:
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/bad_request_error.yaml'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/not_found_error.yaml'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/internal_server_error.yaml'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/generic_error.yaml'
+      operationId: OrderPay
+      tags:
+        - Order
+  /api/v1/orders/{order_uuid}/cancel:
+    put:
+      summary: Create order
+      parameters:
+        - name: order_uuid
+          in: path
+          description: UUID of the order
+          required: true
+          schema:
+            type: string
+            format: uuid
+      tags:
+        - Order
+      responses:
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/internal_server_error.yaml'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/generic_error.yaml'
+        204:
+          description: Order successfully calceled
+          content:
+            application/json:
+              schema:
+                $ref: '../components/order_canceled.yaml'
+        400:
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/bad_request_error.yaml'
+        409:
+          description: Order already paide and cannot be canceled
+          content:
+            application/json:
+              schema:
+                $ref: '../components/errors/order_cannot_be_canceled.yaml'
+      operationId: UpdateOrderbyUUID
+components: {}
+tags:
+  - name: Order
+    description: Операции с данными о заказах — получение и обновление информации
