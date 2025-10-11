@@ -4,6 +4,14 @@ orderByUUID:
     operationId: GetOrders
     tags:
       - Order
+    parameters:
+      - name: order_uuid
+        in: path
+        required: true
+        description: UUID of the order
+        schema:
+          type: string
+          format: uuid
     responses:
       '200':
         description: Orders sucessfuly provided

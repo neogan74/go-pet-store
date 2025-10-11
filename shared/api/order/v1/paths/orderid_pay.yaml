@@ -4,6 +4,14 @@ payOrder:
     operationId: OrderPay
     tags:
       - Order
+    parameters:
+      - name: order_uuid
+        in: path
+        required: true
+        description: UUID of the order
+        schema:
+          type: string
+          format: uuid
     requestBody:
       required: true
       content:
