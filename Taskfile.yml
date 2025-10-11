@@ -24,11 +24,13 @@ vars:
   PROTOC_GEN_GO_GRPC: '{{.BIN_DIR}}/protoc-gen-go-grpc'
 
 
-  OPENAPI_MAIN_FILE_PATH: '{{.ROOT_DIR}}/api/petstore/v1/petstore.openapi.yaml'
-  OPENAPI_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/api/bundles/petstore.openapi.v1.bundle.yaml'
-  OPENAPI_PING_FILE_PATH:  '{{.ROOT_DIR}}/api/bundles/ping.yaml'
+  OPENAPI_MAIN_FILE_PATH: '{{.ROOT_DIR}}/services/store/api/petstore/v1/petstore.openapi.yaml'
+  OPENAPI_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/services/store/api/bundles/petstore.openapi.v1.bundle.yaml'
+  OPENAPI_PING_FILE_PATH:  '{{.ROOT_DIR}}/services/store/api/bundles/ping.yaml'
+  ## Order
   OPENAPI_ORDER_FILE_PATH: '{{.ROOT_DIR}}/shared/api/order/v1/order.openapi.yaml'
-  OPENAPI_OREDR_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/shared/api/bundles/order.openapi.v1.bundle.yaml'
+  OPENAPI_ORDER_RESULT_FILE_PATH:  '{{.ROOT_DIR}}/shared/api/bundles/order.openapi.v1.bundle.yaml'
+  ORDER_CODEGEN_FILE_PATH: '{{.ROOT_DIR}}/services/order/.oapi-codegen-order.yaml'
 
 tasks:
   default:
@@ -91,7 +93,7 @@ tasks:
         echo "📦 Устанавливаем go-oapi-merge {{.GO_OAPI_MERGE_VERSION}}..."
         GOBIN={{.BIN_DIR}} go install github.com/NoL1m1ts/go-oapi-merge@{{.GO_OAPI_MERGE_VERSION}}
   go-oapi-merge:petstore-file-merge:
-    desc: Собираем единый файл спеки
+    desc: "Собираем единый файл спеки"
     deps: [install-go-oapi-merge]
     cmds:
      - '{{.GO_OAPI_MERGE}} --input {{.OPENAPI_MAIN_FILE_PATH}} --output {{.OPENAPI_RESULT_FILE_PATH}}' 
@@ -123,17 +125,17 @@ tasks:
         {{.BIN_DIR}}/oapi-codegen -config .oapi-codegen-ping.yaml {{.OPENAPI_PING_FILE_PATH}}
 
   go-oapi-merge:order-svc-file-merge:
-    desc: Собираем единый файл спеки
+    desc: "Собираем единый файл спеки order-svc"
     deps: [install-go-oapi-merge]
     cmds:
-      - '{{.GO_OAPI_MERGE}} --input {{.OPENAPI_ORDER_FILE_PATH}} --output {{.OPENAPI_OREDR_RESULT_FILE_PATH}}'
+      - '{{.GO_OAPI_MERGE}} --input {{.OPENAPI_ORDER_FILE_PATH}} --output {{.OPENAPI_ORDER_RESULT_FILE_PATH}}'
 
   oapi-generate-order:
-    desc: "Генерирует код по OpenAPI спецификации"
+    desc: "Генерирует код по OpenAPI спецификации order-svc"
     cmds:
       - |
         echo "🛠  Генерируем код по OpenAPI спецификации..."
-        {{.BIN_DIR}}/oapi-codegen -config .oapi-codegen-ping.yaml {{.OPENAPI_PING_FILE_PATH}}
+        {{.BIN_DIR}}/oapi-codegen -config {{.ORDER_CODEGEN_FILE_PATH}} {{.OPENAPI_ORDER_RESULT_FILE_PATH}}
 
   install-buf:
     desc: "Устанавливает Buf в каталог bin"
