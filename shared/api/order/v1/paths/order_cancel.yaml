@@ -4,6 +4,14 @@ cancelOrder:
     operationId: UpdateOrderbyUUID
     tags:
       - Order
+    parameters:
+      - name: order_uuid
+        in: path
+        required: true
+        description: UUID of the order
+        schema:
+          type: string
+          format: uuid
     responses:
       '204':
         description: Order successfully calceled
